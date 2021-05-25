@@ -1,4 +1,4 @@
-## install.packages("~/R/regdevelop/pkg/relevance_1.1.tar.gz", repos=NULL, lib="~/local/R_libs")
+## install.packages("~/R/regdevelop/pkg/relevance_1.2.tar.gz", repos=NULL, lib="~/local/R_libs")
 require(relevance)
 
 ##

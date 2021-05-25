@@ -30,7 +30,7 @@ options(t.oldopt)  ##  restore the old options
     ## by 'print.inference'. It produces an extensive output.
   }
 
-## ----plot.inference, fig.height=5, fig.width=9--------------------------------
+## ----plotInference, fig.height=5, fig.width=9---------------------------------
 plot(rt)
 
 ## ----termeffects, fig.width=9, fig.height=6-----------------------------------
@@ -46,7 +46,8 @@ plot(termeffects(r.blast), single=TRUE)  ## plot all effects
 t.opt <- options(show.term.relevance=c("coef", "dropRls", "dropRls.symbol"))
 rt
 ## restore the old options
-options(list = t.opt)
+options(list = t.opt) ## the former options
+options(list=relevance.options) ## restore the package's defaults
 
 ## ----printlist----------------------------------------------------------------
 rr <- print(termeffects(r.blast), print=FALSE)
