@@ -8,8 +8,8 @@ getOption("rlv.threshold")
 
 ## ----twosamples---------------------------------------------------------------
   t.test(sleep[sleep$group == 1, "extra"], sleep[sleep$group == 2, "extra"])
-(r.sleep <- 
-   twosamples(sleep[sleep$group == 1, "extra"], sleep[sleep$group == 2, "extra"])
+( r.sleep <- 
+    twosamples(sleep[sleep$group == 1, "extra"], sleep[sleep$group == 2, "extra"])
 )
 
 ## ----sleep2-------------------------------------------------------------------
@@ -17,40 +17,77 @@ t.oldopt <- options(show.inference = "classical")
 r.sleep
 options(t.oldopt)  ##  restore the old options
 
+## ----correlation--------------------------------------------------------------
+correlation(iris[1:50,1:2], method="spearman")
+
 ## ----termtable----------------------------------------------------------------
   data(swiss, package="datasets")
   rr <- lm(Fertility ~ . , data = swiss)
   rt <- termtable(rr)
   rt
-  names(rt)
+  names(rt) ## The result of termtable has 22 columns
   if(interactive()) { ## too much avoidable output for the vignette
     str(rt)  
-    print(data.frame(rt)) ## or  print(rt, show="all")
-    ## This avoids selection and preparation of columns 
-    ## by 'print.inference'. It produces an extensive output.
+    data.frame(rt) ## or  print(rt, show="all")
+    ## This avoids selection and preparation of columns by 'print.inference'. 
   }
 
-## ----plotInference, fig.height=5, fig.width=9---------------------------------
+## ----<termtablePrint----------------------------------------------------------
+  t.oldopt <- options(show.inference = "classical")
+  rt
+  options(t.oldopt)  ##  restore the old options
+
+## ----plotInference, fig.height=4, fig.width=9---------------------------------
 plot(rt)
 
 ## ----termeffects, fig.width=9, fig.height=6-----------------------------------
-data(d.blast)
-r.blast <-
-  lm(log10(tremor)~location+log10(distance)+log10(charge), data=d.blast)
-(rte <- termeffects(r.blast))
-print(rte, show=c("classical","coefRls","coefRls.symbol"), single=TRUE)
+  data(d.blast)
+  r.blast <-
+    lm(log10(tremor)~location+log10(distance)+log10(charge), 
+       data=d.blast)
+  ( rte <- termeffects(r.blast) )
 
-plot(termeffects(r.blast), single=TRUE)  ## plot all effects
+  plot(termeffects(r.blast))  ## plot effects for terms with >1 df
+
+## ----inference----------------------------------------------------------------
+  ( rr <- inference(r.blast) )
+
+## ----show---------------------------------------------------------------------
+  showd(d.blast)
 
 ## ----getOption----------------------------------------------------------------
-t.opt <- options(show.term.relevance=c("coef", "dropRls", "dropRls.symbol"))
-rt
+  t.opt <- options(show.terms.relevance=c("coef", "dropRls", "dropRls.symbol"))
+  rt
+  
 ## restore the old options
-options(list = t.opt) ## the former options
-options(list=relevance.options) ## restore the package's defaults
+  options(t.opt) ## the former options
+  options(relevance.options) ## restore the package's defaults
 
 ## ----printlist----------------------------------------------------------------
-rr <- print(termeffects(r.blast), print=FALSE)
-attr(rr, "head") <- sub("lm", "Linear Regression", attr(rr, "head"))
-print(rr)
+rpr <- print(termeffects(r.blast), print=FALSE)
+attr(rpr, "head") <- sub("lm", "Linear Regression", attr(rpr, "head"))
+rpr
+
+## ----sleep--------------------------------------------------------------------
+data(sleep)
+dd <- subset(sleep, group==2)
+onesample(60*dd$extra, rlv.threshold=60, standardize=FALSE)
+
+## ----anchoring, fig.height=4, fig.width=9-------------------------------------
+data(d.everest)
+rr <- twosamples(log(y)~g, data=d.everest, var.equal=TRUE)
+print(rr, show="classical")
+rr
+
+pltwosamples(log(y)~g, data=d.everest)
+
+## ----blast, fig.height=3------------------------------------------------------
+dd <- d.blast[seq(1,388,3),]
+dd <- na.omit(dd[dd$location %in% paste("loc",c(1,2,4),sep=""),])
+dd$time <- as.numeric(dd$date-min(dd$date))/365
+
+rlm <- lm(log10(tremor)~location+log10(distance)+log10(charge)+time, data=dd,
+          contrasts=list(location="contr.sum"))
+( rt <- termtable(rlm) )
+plot(rt)
 
