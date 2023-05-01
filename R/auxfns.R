@@ -1,4 +1,4 @@
-
+      
 u.true <- function (x) length(x)>0 && is.logical(x) && (!is.na(x)) && all(x)
 u.notfalse <-
   function (x) !(length(x)==1 && is.logical(x) && (!is.na(x)) && !x)
@@ -9,6 +9,7 @@ i.last <- function(data, n=1) data[sign(n)*(((ldt <- length(data))-abs(n)+1):ldt
 RNAMES <- function (x) if (!is.null(dim(x))) row.names(x) else names(x)
 ## u.debug <- function () u.true(rlvoptions("debug"))
 DB <- function (on=TRUE) options(error=if(on) recover else NULL, warn=on)
+i.extendrange <- function(range, ext=0.05)  range + c(-1,1)*ext*diff(range)
 ## -----------------------------------------------------------
 i.def <- function(arg, value = TRUE, valuetrue = value, valuefalse = FALSE)
 {
@@ -85,3 +86,45 @@ u.merge <- function (dd1, dd2 = NA, which=NULL, after=NULL,
   rr
 }
 ## -----------------------------------------------------------------
+## ======================================================================
+shortenstring <- function (x, n=50, endstring="..", endchars=NULL)
+{ ## from plgraphics
+  if (length(endchars)==0) endchars <- pmin(3,ceiling(n/10))
+  if (any(li <- 1 >= (ncut <- n-nchar(endstring)-endchars))) {
+    warning(":shortenstring: argument 'n' too small for given 'endstring' and 'endchar'")
+    endstring <- ifelse(li, ".", endstring)
+    endchars <- ifelse(li, 0, endchars)
+    ncut <- n-nchar(endstring)-endchars
+  }
+  if (length(x) && any(n < (lnc <- nchar(x))))
+    ifelse(n<lnc & ncut>1, paste(substring(x, 1, ncut), endstring,
+          substring(x, lnc-endchars+1, lnc), sep=""), x)
+}
+## ======================================================================
+i.getIfrData <-
+  function(object, ...)
+{
+  if(is.atomic(object)) object <- rbind(object)
+  lobj <- as.data.frame(object)
+  lnmdf <- names(lobj)
+  largs <- list(...)
+  if (length(largs$estimate)==0) 
+    largs$estimate <-
+      i.def(if(is.list(object)) object$estimate, cbind(object)[,1])
+  lnm <- names(largs)
+  latr <- attributes(object)
+  lnmatr <- names(latr)
+  for (inm in lnm) {
+    ld <- largs[[inm]]
+    if (length(ld)==0 || all(is.na(ld))) {
+      ld <- if (inm%in%lnmdf) lobj[[inm]] 
+            else {
+              if (inm%in%lnmatr) latr[[inm]] else NA }
+    }
+    largs[inm] <- list(ld)
+  }
+  rr <- data.frame(largs)
+  if(length(dim(object)) && nrow(rr)==nrow(object))
+    row.names(rr) = row.names(object)
+  rr
+}

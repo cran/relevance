@@ -4,7 +4,7 @@
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 %% \usepackage{germanU}
-%% \usepackage[noae]{Sweave}
+\usepackage[noae]{Sweave}
 \usepackage[a4paper]{geometry}  %% , text={14.5cm,22cm}
 \usepackage{color} %uncomment BF
 \usepackage{booktabs} % nice tables with \toprule \middlerule \bottomrule
@@ -18,11 +18,9 @@
 %\VignetteEngine{knitr::knitr}
 % \usepackage{knitr}
 %\VignetteDepends{relevance}
-%\VignetteIndexEntry{'Calculate Relevance and Significance Measures'}
-\setlength{\topmargin}{-10mm}
-\addtolength{\textheight}{30mm}
-\addtolength{\oddsidemargin}{-5mm}
-\addtolength{\textwidth}{15mm}%%--- 15.0 + 1.5 = 16.5
+%\VignetteIndexEntry{'Package relevance for calculating Relevance and Significance Measures'}
+\addtolength{\textwidth}{2.5cm}%%--- 15.0 + 2.5 = 17.5
+\addtolength{\oddsidemargin}{-1.04cm}
 
 %% ================================================================
 
@@ -47,13 +45,7 @@ as well as Success of Replication}
   
   The package \T{relevance} calculates these measures for a simple
   comparison of two samples as well as for many regression models 
-  and provides a suitable prinitng method and a plotting method for the
-  terms of a model.
-  
-  Reproducibility is a basic requirement in empirical science.
-  Replication studies have become popular, with differing ideas on how to
-  measure their success to reproduce the results of the original study.
-  The package implements measures based on the relevance measure.
+  and provides a suitable prinitng method.
 
 \end{abstract}
 
@@ -93,7 +85,6 @@ Thus, the question that is answered mutates to:
 the (alternative) hypothesis that was true on an apriori basis?''
 This does not seem to be a fascinating task.
 
-\Vneed{30mm}
 \Tit{Relevance.}
 The scientifically meaningful question is whether the effect is
 \emph{relevant}, and this needs the specification of a 
@@ -419,11 +410,12 @@ according to \Hneed{50mm} \T{getOption("show.inference")}.
   rr <- lm(Fertility ~ . , data = swiss)
   rt <- termtable(rr)
   rt
-  names(rt) ## The result of termtable has 24 columns
-  ## The following statements are commented out to avoid excessive output
-  ##   str(rt)  
-  ##   data.frame(rt) ## or  print(rt, show="all")
+  names(rt) ## The result of termtable has 22 columns
+  if(interactive()) { ## too much avoidable output for the vignette
+    str(rt)  
+    data.frame(rt) ## or  print(rt, show="all")
     ## This avoids selection and preparation of columns by 'print.inference'. 
+  }
 @ 
 Again, other results can be selected using options.
 <<<termtablePrint>>=

@@ -25,11 +25,12 @@ correlation(iris[1:50,1:2], method="spearman")
   rr <- lm(Fertility ~ . , data = swiss)
   rt <- termtable(rr)
   rt
-  names(rt) ## The result of termtable has 24 columns
-  ## The following statements are commented out to avoid excessive output
-  ##   str(rt)  
-  ##   data.frame(rt) ## or  print(rt, show="all")
+  names(rt) ## The result of termtable has 22 columns
+  if(interactive()) { ## too much avoidable output for the vignette
+    str(rt)  
+    data.frame(rt) ## or  print(rt, show="all")
     ## This avoids selection and preparation of columns by 'print.inference'. 
+  }
 
 ## ----<termtablePrint----------------------------------------------------------
   t.oldopt <- options(show.inference = "classical")
