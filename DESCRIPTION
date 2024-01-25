@@ -1,8 +1,8 @@
 Package: relevance
 Type: Package
 Title: Calculate Relevance and Significance Measures
-Version: 2.0
-Date: 2023-04-08
+Version: 2.1
+Date: 2024-01-24
 Author: Werner A. Stahel
 Maintainer: Werner A. Stahel <stahel@stat.math.ethz.ch>
 Depends: R (>= 3.5.0)
@@ -22,6 +22,6 @@ Description: Calculates relevance and significance values for
   available in the documentation.
 License: GPL-2
 NeedsCompilation: no
-Packaged: 2023-05-01 16:00:31 UTC; stahel
+Packaged: 2024-01-25 16:36:07 UTC; stahel
 Repository: CRAN
-Date/Publication: 2023-05-01 16:30:02 UTC
+Date/Publication: 2024-01-25 17:00:02 UTC
